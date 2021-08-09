@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import TaskList from './TaskList';
-import { TaskItemStruct, TaskFilterStruct } from './_declarations';
+import { TaskItemStruct, TaskFilterStruct } from '../_declarations';
 
 const App: NextPage = () => {
   const [tasks, setTasks] = useState<TaskItemStruct[]>([]);

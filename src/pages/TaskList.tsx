@@ -1,4 +1,4 @@
-import { TaskItemStruct, TaskFilterStruct } from './_declarations';
+import { TaskItemStruct, TaskFilterStruct } from '../_declarations';
 import TaskItem from './TaskItem';
 import TaskAdder from './TaskAdder';
 
@@ -23,7 +23,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     }
   });
 
-  const onTaskFinish = (id: number, is_finished: boolean) => {
+  const onTaskFinish = (id: string, is_finished: boolean) => {
     const newTask = tasks.map((task) => {
       if (task.id === id) {
         task.is_finished = !is_finished;
@@ -34,7 +34,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     setTasks(newTask);
   };
 
-  const onTaskRename = (id: number, name: string) => {
+  const onTaskRename = (id: string, name: string) => {
     const newTask = tasks.map((task) => {
       if (task.id === id) {
         task.name = name;
@@ -45,7 +45,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     setTasks(newTask);
   };
 
-  const onTaskRemove = (id: number, is_removed: boolean) => {
+  const onTaskRemove = (id: string, is_removed: boolean) => {
     const newTask = tasks.map((task) => {
       if (task.id === id) {
         task.is_removed = !is_removed;
@@ -56,7 +56,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     setTasks(newTask);
   };
 
-  const onTaskRemovePerm = (id: number) => {
+  const onTaskRemovePerm = (id: string) => {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
   };

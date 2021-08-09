@@ -1,12 +1,12 @@
 import React from 'react';
-import { TaskItemStruct } from './_declarations';
+import { TaskItemStruct } from '../_declarations';
 
 type Props = {
   task: TaskItemStruct;
-  onTaskFinish: (id: number, is_finished: boolean) => void;
-  onTaskRename: (id: number, name: string) => void;
-  onTaskRemove: (id: number, is_removed: boolean) => void;
-  onTaskRemovePerm: (id: number) => void;
+  onTaskFinish: (id: string, is_finished: boolean) => void;
+  onTaskRename: (id: string, name: string) => void;
+  onTaskRemove: (id: string, is_removed: boolean) => void;
+  onTaskRemovePerm: (id: string) => void;
 };
 
 const TaskItem: React.FC<Props> = ({
