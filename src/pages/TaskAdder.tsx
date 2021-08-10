@@ -37,11 +37,11 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
         user_id: newUserId,
         status: TaskStatusStruct.exist,
       },
-      headers: { 'Content-Type': 'application/json', origin: 'http://localhost' },
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost' },
     };
 
     axios
-      .post('localhost/task/create', requestOptions)
+      .post('http://localhost:8080/task/create', requestOptions)
       .then((response) => {
         console.log(response.data);
       })
@@ -70,18 +70,18 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
       {/* 後にPOST方式でのデータ送信プロパティ追加 */}
       <form onSubmit={(e) => onSubmitNewTask(e)}>
         <input
-          type="text"
+          type='text'
           value={inputName}
-          placeholder="タスク名"
+          placeholder='タスク名'
           onChange={(e) => setInputName(e.target.value)}
         />
         <input
-          type="text"
+          type='text'
           value={inputDesc}
-          placeholder="詳細"
+          placeholder='詳細'
           onChange={(e) => setInputDesc(e.target.value)}
         />
-        <button type="submit" onSubmit={(e) => onSubmitNewTask(e)}>
+        <button type='submit' onSubmit={(e) => onSubmitNewTask(e)}>
           追加
         </button>
       </form>
