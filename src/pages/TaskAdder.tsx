@@ -12,22 +12,11 @@ const newUserId: string = new Date().getTime().toString();
 const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
   const [inputName, setInputName] = useState('');
   const [inputDesc, setInputDesc] = useState('');
+  const [taskId, setTaskId] = useState('');
 
   const onSubmitNewTask = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
     if (!(inputName && inputDesc)) return;
-
-    /*const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', origin: 'http://localhost' },
-      body: JSON.stringify({
-        name: inputName,
-        description: inputDesc,
-        is_done: false,
-        user_id: newUserId,
-        status: TaskStatusStruct.exist,
-      }),
-    };*/
 
     const requestOptions = {
       data: {
@@ -37,28 +26,27 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
         user_id: newUserId,
         status: TaskStatusStruct.exist,
       },
-      headers: { 'Content-Type': 'application/json', origin: 'http://localhost' },
+      headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
     };
 
     axios
-      .post('localhost/task/create', requestOptions)
+      .post('http://localhost:8080/task/create', requestOptions)
       .then((response) => {
-        console.log(response.data);
+        setTaskId(response.data.TaskId);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    //fetch('http://localhost:8080/task/create', requestOptions).then((response) => response.json());
-    //.then((data) => setPostId(data));
-
     const newTask: TaskItemStruct = {
-      id: '5353',
+      id: taskId,
       name: inputName,
       description: inputDesc,
       is_finished: false,
       is_removed: false,
     };
+
+    console.log(newTask);
 
     setTasks([newTask, ...tasks]);
     setInputName('');
