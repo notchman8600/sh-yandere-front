@@ -1,53 +1,45 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import { TaskItemStruct, TaskStatusStruct } from '../_declarations';
+import axios from 'axios';
+import { PostTaskCreateReturns, PostTaskCreateStruct, TaskItemStruct } from '../_types';
+import { AxiosPostCreate } from '../AxiosLinkDB';
 
 type Props = {
   tasks: TaskItemStruct[];
   setTasks: React.Dispatch<React.SetStateAction<TaskItemStruct[]>>;
 };
 
-const newUserId: string = new Date().getTime().toString();
+const newUserId = '123456789-987654321';
 
 const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
   const [inputName, setInputName] = useState('');
   const [inputDesc, setInputDesc] = useState('');
-  const [taskId, setTaskId] = useState('');
+  const [resPostCreate, setResPostCreate] = useState([]);
 
   const onSubmitNewTask = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
     if (!(inputName && inputDesc)) return;
 
-    const requestOptions = {
-      data: {
-        name: inputName,
-        description: inputDesc,
-        is_done: false,
-        user_id: newUserId,
-        status: TaskStatusStruct.exist,
-      },
-      headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
+    const postData: PostTaskCreateStruct = {
+      name: inputName,
+      description: inputDesc,
+      is_done: false,
+      user_id: newUserId,
+      status: 'exist',
     };
 
-    axios
-      .post('http://localhost:8080/task/create', requestOptions)
-      .then((response) => {
-        console.log(response);
-        setTaskId(response.data.task_id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const responses = AxiosPostCreate(postData);
+
+    console.log(responses);
+
+    if (!responses['result'] || responses === null) return;
 
     const newTask: TaskItemStruct = {
-      id: taskId,
+      id: responses.task_id,
       name: inputName,
       description: inputDesc,
       is_finished: false,
       is_removed: false,
     };
-
-    console.log(newTask);
 
     setTasks([newTask, ...tasks]);
     setInputName('');
@@ -56,7 +48,6 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
 
   return (
     <>
-      {/* 後にPOST方式でのデータ送信プロパティ追加 */}
       <form onSubmit={(e) => onSubmitNewTask(e)}>
         <input
           type='text'

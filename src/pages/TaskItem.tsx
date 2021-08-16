@@ -1,5 +1,5 @@
 import React from 'react';
-import { TaskItemStruct } from '../_declarations';
+import { TaskItemStruct } from '../_types';
 
 type Props = {
   task: TaskItemStruct;

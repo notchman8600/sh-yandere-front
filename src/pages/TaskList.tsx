@@ -1,4 +1,4 @@
-import { TaskItemStruct, TaskFilterStruct } from '../_declarations';
+import { TaskItemStruct, TaskFilterStruct } from '../_types';
 import TaskItem from './TaskItem';
 import TaskAdder from './TaskAdder';
 
