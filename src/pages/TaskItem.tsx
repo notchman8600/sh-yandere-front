@@ -17,7 +17,7 @@ const TaskItem: React.FC<Props> = ({
   onTaskRemovePerm,
 }) => {
   return (
-    <li>
+    <>
       <input
         type="checkbox"
         checked={task.is_finished}
@@ -36,7 +36,7 @@ const TaskItem: React.FC<Props> = ({
       <button hidden={!task.is_removed} onClick={() => onTaskRemovePerm(task.id)}>
         抹消
       </button>
-    </li>
+    </>
   );
 };
 
