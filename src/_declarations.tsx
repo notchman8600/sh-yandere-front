@@ -13,3 +13,5 @@ export const TaskStatusStruct = Object.freeze({
   removed: 'removed',
   eliminated: 'eliminated',
 });
+
+//export type CreateTaskDataStruct = {};
