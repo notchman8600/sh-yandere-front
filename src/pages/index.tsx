@@ -2,14 +2,32 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import TaskList from './TaskList';
-import { TaskItemStruct, TaskFilterStruct } from '../_types';
+import axios from 'axios';
+import { TaskItemStruct, TaskFilterStruct, PostTaskReadStruct } from '../_types';
 import { styleSceneTodoApp } from '../_styles';
+import { tmpUserId } from '../_constParams';
 
 const App: NextPage = () => {
   const styles = styleSceneTodoApp();
 
   const [tasks, setTasks] = useState<TaskItemStruct[]>([]);
   const [taskFilter, setTaskFilter] = useState<TaskFilterStruct>('unfinished');
+
+  const postData: PostTaskReadStruct = {
+    user_id: tmpUserId,
+  };
+
+  const requestOptions = {
+    data: postData,
+    headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
+  };
+
+  axios
+    .post('http://localhost:8080/task/read', requestOptions)
+    .then((response) => console.log(response))
+    .catch((error) => {
+      console.log(error);
+    });
 
   return (
     <>

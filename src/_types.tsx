@@ -16,11 +16,6 @@ export type PostTaskCreateStruct = {
   status: TaskStatusStruct;
 };
 
-export type PostTaskCreateReturns = {
-  task_id: string;
-  result: boolean;
-};
-
 export type PostTaskUpdateStruct = {
   task_id: string;
   name: string;
@@ -28,6 +23,10 @@ export type PostTaskUpdateStruct = {
   is_done: boolean;
   user_id: string;
   status: TaskStatusStruct;
+};
+
+export type PostTaskReadStruct = {
+  user_id: string;
 };
 
 export type TaskStatusStruct = 'exist' | 'remove' | 'eliminated';

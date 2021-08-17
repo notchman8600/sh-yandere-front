@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
 import axios from 'axios';
-import { PostTaskCreateReturns, PostTaskCreateStruct, TaskItemStruct } from '../_types';
-import { AxiosPostCreate } from '../AxiosLinkDB';
+import React, { useState } from 'react';
+import { PostTaskCreateStruct, TaskItemStruct } from '../_types';
+import { tmpUserId } from '../_constParams';
 
 type Props = {
   tasks: TaskItemStruct[];
   setTasks: React.Dispatch<React.SetStateAction<TaskItemStruct[]>>;
 };
 
-const newUserId = '123456789-987654321';
-
 const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
   const [inputName, setInputName] = useState('');
   const [inputDesc, setInputDesc] = useState('');
-  const [resPostCreate, setResPostCreate] = useState([]);
+  const [taskId, setTaskId] = useState('');
 
   const onSubmitNewTask = (e: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
@@ -23,23 +21,33 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
       name: inputName,
       description: inputDesc,
       is_done: false,
-      user_id: newUserId,
+      user_id: tmpUserId,
       status: 'exist',
     };
 
-    const responses = AxiosPostCreate(postData);
+    const requestOptions = {
+      data: postData,
+      headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
+    };
 
-    console.log(responses);
-
-    if (!responses['result'] || responses === null) return;
+    axios
+      .post('http://localhost:8080/task/create', requestOptions)
+      .then((response) => {
+        setTaskId(response.data.task_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     const newTask: TaskItemStruct = {
-      id: responses.task_id,
+      id: taskId,
       name: inputName,
       description: inputDesc,
       is_finished: false,
       is_removed: false,
     };
+
+    console.log(newTask);
 
     setTasks([newTask, ...tasks]);
     setInputName('');
