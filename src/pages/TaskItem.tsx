@@ -1,11 +1,11 @@
 import React from 'react';
-import { TaskItemStruct } from '../_types';
+import { TaskItemStruct, TaskStatusStruct } from '../_types';
 
 type Props = {
   task: TaskItemStruct;
-  onTaskFinish: (id: string, is_finished: boolean) => void;
+  onTaskFinish: (id: string, is_done: boolean) => void;
   onTaskRename: (id: string, name: string) => void;
-  onTaskRemove: (id: string, is_removed: boolean) => void;
+  onTaskRemove: (id: string, status: TaskStatusStruct) => void;
   onTaskRemovePerm: (id: string) => void;
 };
 
@@ -20,20 +20,20 @@ const TaskItem: React.FC<Props> = ({
     <>
       <input
         type="checkbox"
-        checked={task.is_finished}
-        disabled={task.is_removed}
-        onChange={() => onTaskFinish(task.id, task.is_finished)}
+        checked={task.is_done}
+        disabled={task.status === 'remove'}
+        onChange={() => onTaskFinish(task.id, task.is_done)}
       />
       <input
         type="text"
         value={task.name}
-        disabled={task.is_finished || task.is_removed}
+        disabled={task.is_done || task.status === 'remove'}
         onChange={(e) => onTaskRename(task.id, e.target.value)}
       />
-      <button onClick={() => onTaskRemove(task.id, task.is_removed)}>
-        {task.is_removed ? '復元' : '削除'}
+      <button onClick={() => onTaskRemove(task.id, task.status)}>
+        {task.status === 'remove' ? '復元' : '削除'}
       </button>
-      <button hidden={!task.is_removed} onClick={() => onTaskRemovePerm(task.id)}>
+      <button hidden={task.status === 'remove'} onClick={() => onTaskRemovePerm(task.id)}>
         抹消
       </button>
     </>

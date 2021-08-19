@@ -2,8 +2,8 @@ export type TaskItemStruct = {
   id: string;
   name: string;
   description: string;
-  is_finished: boolean;
-  is_removed: boolean;
+  is_done: boolean;
+  status: TaskStatusStruct;
 };
 
 export type TaskFilterStruct = 'unfinished' | 'finished' | 'all' | 'removed';
