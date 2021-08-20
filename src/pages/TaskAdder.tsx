@@ -43,8 +43,8 @@ const TaskAdder: React.FC<Props> = ({ tasks, setTasks }) => {
       id: taskId,
       name: inputName,
       description: inputDesc,
-      is_finished: false,
-      is_removed: false,
+      is_done: false,
+      status: postData.status,
     };
 
     console.log(newTask);

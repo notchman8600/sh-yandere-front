@@ -1,4 +1,9 @@
-import { TaskItemStruct, TaskFilterStruct, PostTaskUpdateStruct } from '../_types';
+import {
+  TaskItemStruct,
+  TaskFilterStruct,
+  PostTaskUpdateStruct,
+  TaskStatusStruct,
+} from '../_types';
 import TaskItem from './TaskItem';
 import TaskAdder from './TaskAdder';
 import { tmpUserId } from '../_constParams';
@@ -18,13 +23,13 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
   const FilteredTasks = tasks.filter((task) => {
     switch (taskFilter) {
       case 'unfinished':
-        return !task.is_finished && !task.is_removed;
+        return !task.is_done && task.status === 'exist';
       case 'finished':
-        return task.is_finished && !task.is_removed;
+        return task.is_done && task.status === 'exist';
       case 'all':
-        return !task.is_removed;
+        return task.status === 'exist';
       case 'removed':
-        return task.is_removed;
+        return task.status === 'remove';
     }
   });
 
@@ -43,7 +48,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
         AxiosUpdateTask(postData);
         if (postResult === false) return;
 
-        task.is_finished = !is_finished;
+        task.is_done = !is_finished;
       }
       return task;
     });
@@ -58,7 +63,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           task_id: task.id,
           name: name,
           description: task.description,
-          is_done: task.is_finished,
+          is_done: task.is_done,
           user_id: tmpUserId,
           status: 'exist',
         };
@@ -73,22 +78,25 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
     setTasks(newTask);
   };
 
-  const onTaskRemove = (task_id: string, is_removed: boolean) => {
+  const onTaskRemove = (task_id: string, status: TaskStatusStruct) => {
     const newTask = tasks.map((task) => {
       if (task.id === task_id) {
+        if (task.status === 'exist') status = 'remove';
+        else status = 'exist';
+
         const postData: PostTaskUpdateStruct = {
           task_id: task.id,
           name: task.name,
           description: task.description,
-          is_done: task.is_finished,
+          is_done: task.is_done,
           user_id: tmpUserId,
-          status: 'remove',
+          status: status,
         };
 
         AxiosUpdateTask(postData);
         if (postResult === false) return;
 
-        task.is_removed = !is_removed;
+        task.status = status;
       }
       return task;
     });
@@ -103,7 +111,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
           task_id: task.id,
           name: task.name,
           description: task.description,
-          is_done: task.is_finished,
+          is_done: task.is_done,
           user_id: tmpUserId,
           status: 'eliminated',
         };
@@ -118,12 +126,12 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
 
   const onTaskRemovePermAll = () => {
     tasks.map((task) => {
-      if (task.is_removed) {
+      if (task.status === 'remove') {
         const postData: PostTaskUpdateStruct = {
           task_id: task.id,
           name: task.name,
           description: task.description,
-          is_done: task.is_finished,
+          is_done: task.is_done,
           user_id: tmpUserId,
           status: 'eliminated',
         };
@@ -132,7 +140,7 @@ const TaskList: React.FC<Props> = ({ tasks, setTasks, taskFilter, setTaskFilter 
         if (postResult === false) return;
       }
     });
-    const newTasks = tasks.filter((task) => !task.is_removed);
+    const newTasks = tasks.filter((task) => task.status === 'exist');
     setTasks(newTasks);
   };
 
