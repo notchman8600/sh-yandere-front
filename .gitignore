@@ -38,3 +38,6 @@ yarn-error.log*
 
 # for Windows
 Desktop.ini
+
+# for vscode
+.vscode
